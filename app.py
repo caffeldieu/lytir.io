@@ -12,16 +12,14 @@ import os
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'change-this-to-something-random-and-secure-in-production')
+app.secret_key = os.environ.get('SECRET_KEY', 'lytir.io')
 
 # Configure CORS - UPDATE THIS WITH YOUR FRONTEND URL WHEN DEPLOYING
 CORS(app, supports_credentials=True, origins=[
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'http://localhost:5001',
-    # Add your deployed frontend URL here:
-    # 'https://your-frontend-url.repl.co',
-    # 'https://your-frontend-url.netlify.app',
+    'https://your-frontend-url.repl.co',  # Add this!
+    'https://your-frontend-url.netlify.app',  # Or this!
 ])
 
 # Database initialization
