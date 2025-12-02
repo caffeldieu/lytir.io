@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lytir.io - Ireland's Forecasting Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green-primary: #10B981;
+            --green-light: #34D399;
+            --green-dark: #059669;
+            --navy-dark: #0F172A;
+            --navy-medium: #1E293B;
+            --navy-light: #334155;
+            --white: #FFFFFF;
+            --gray-light: #94A3B8;
+            --gray-dark: #64748B;
+            --accent-blue: #3B82F6;
+            --accent-orange: #F97316;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, var(--navy-dark) 0%, #1a1f3a 100%);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        nav {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-dark) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--white);
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            padding: 8rem 0 6rem;
+            text-align: center;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--gray-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-dark) 100%);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-visual {
+            margin-top: 5rem;
+            position: relative;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .data-orb {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.3), transparent);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .data-ring {
+            position: absolute;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .ring-1 { width: 350px; height: 350px; animation-delay: 0s; }
+        .ring-2 { width: 420px; height: 420px; animation-delay: 0.5s; }
+        .ring-3 { width: 500px; height: 500px; animation-delay: 1s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+
+        .how-it-works {
+            padding: 5rem 0;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-dark) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .step-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--green-light);
+        }
+
+        .step-card p {
+            color: var(--gray-light);
+            line-height: 1.7;
+        }
+
+        .markets {
+            padding: 5rem 0;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .markets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.15);
+        }
+
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-sports {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .badge-politics {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .badge-tech {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green-light);
+        }
+
+        .market-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .prediction-bar {
+            margin: 1.5rem 0;
+        }
+
+        .prediction-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray-light);
+        }
+
+        .prediction-value {
+            color: var(--green-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green-primary) 0%, var(--green-light) 100%);
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        .market-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .forecasters {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+
+        .btn-forecast {
+            padding: 0.6rem 1.3rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green-light);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-forecast:hover {
+            background: rgba(16, 185, 129, 0.25);
+            transform: scale(1.05);
+        }
+
+        .stats {
+            padding: 5rem 0;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--green-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-light);
+            font-size: 1.1rem;
+        }
+
+        footer {
+            padding: 3rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--green-primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green-primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            color: var(--gray-dark);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .market-detail {
+            padding: 3rem 0;
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .market-detail.active {
+            display: block;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-light);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            color: var(--green-primary);
+            transform: translateX(-5px);
+        }
+
+        .market-detail-header {
+            margin-bottom: 3rem;
+        }
+
+        .market-detail-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            margin: 1rem 0;
+            line-height: 1.2;
+        }
+
+        .market-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--gray-light);
+            margin-top: 1rem;
+        }
+
+        .market-description {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--green-primary);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .crowd-forecast {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .crowd-percentage {
+            font-family: 'Outfit', sans-serif;
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--green-primary);
+            margin: 1rem 0;
+        }
+
+        .crowd-label {
+            color: var(--gray-light);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .forecast-count {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        .gauge {
+            width: 200px;
+            height: 100px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .gauge-bg {
+            width: 200px;
+            height: 100px;
+            border-radius: 100px 100px 0 0;
+            border: 15px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            width: 200px;
+            height: 100px;
+            border-radius: 100px 100px 0 0;
+            border: 15px solid var(--green-primary);
+            border-bottom: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip-path: polygon(0 0, 67% 0, 67% 100%, 0 100%);
+            animation: fillGauge 1s ease-out;
+        }
+
+        @keyframes fillGauge {
+            from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+            to { clip-path: polygon(0 0, 67% 0, 67% 100%, 0 100%); }
+        }
+
+        .forecast-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .forecast-panel h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .slider-container {
+            margin: 2rem 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            appearance: none;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--green-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--green-primary);
+            margin: 1.5rem 0;
+        }
+
+        .token-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            gap: 8px;
+            margin-top: 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--green-primary), var(--green-light));
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: growBar 0.8s ease-out backwards;
+        }
+
+        .chart-bar:hover {
+            background: linear-gradient(to top, var(--green-light), var(--green-primary));
+            transform: scale(1.05);
+        }
+
+        @keyframes growBar {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+        }
+
+        .recent-forecasts {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .forecast-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s ease;
+        }
+
+        .forecast-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .forecast-info {
+            flex: 1;
+        }
+
+        .forecast-username {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .forecast-prediction {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        .forecast-time {
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+        }
+
+        .market-stats {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .stat-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-item-label {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-item-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .dashboard {
+            padding: 3rem 0;
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .profile-header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-username {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--green-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .profile-stat-label {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .forecasts-table {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            overflow-x: auto;
+        }
+
+        .forecasts-table h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--gray-light);
+            font-weight: 600;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .forecast-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: rgba(148, 163, 184, 0.2);
+            color: var(--gray-light);
+        }
+
+        .status-resolved {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green-light);
+        }
+
+        .reward-positive {
+            color: var(--green-primary);
+            font-weight: 700;
+        }
+
+        .accuracy-graph {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .graph-canvas {
+            margin-top: 2rem;
+            height: 250px;
+            position: relative;
+        }
+
+        .graph-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+        }
+
+        .graph-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .achievements {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .achievement-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-badge.unlocked {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .achievement-badge:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            color: var(--gray-light);
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-preview {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .leaderboard-item.current-user {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            margin: 0.5rem 0;
+        }
+
+        .leaderboard-rank {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green-primary);
+            min-width: 40px;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .leaderboard-accuracy {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-tokens {
+            font-weight: 700;
+            color: var(--green-primary);
+            font-size: 1.1rem;
+        }
+
+        .view-full {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--green-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-full:hover {
+            transform: translateX(5px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes drawLine {
+            from {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+            }
+            to {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.8rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo" onclick="showPage('home')">Lytir.io</div>
+        <ul class="nav-links">
+            <li><a onclick="showPage('home')">Home</a></li>
+            <li><a onclick="showPage('markets')">Markets</a></li>
+            <li><a onclick="showPage('dashboard')">Leaderboard</a></li>
+            <li><a href="#">How it Works</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <button class="btn btn-login" onclick="showLoginModal()">Login</button>
+            <button class="btn btn-signup" onclick="showSignupModal()">Sign Up</button>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div id="homepage" class="page active">
+        <section class="hero">
+            <div class="container">
+                <h1>Predict the Future.<br>Earn Rewards.</h1>
+                <p>Ireland's first crowdsourced forecasting platform. Make predictions, compete with the community, climb the leaderboard.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showPage('markets')">Start Forecasting</button>
+                    <button class="btn btn-secondary">Watch Demo</button>
+                </div>
+                <div class="hero-visual">
+                    <div class="data-ring ring-1"></div>
+                    <div class="data-ring ring-2"></div>
+                    <div class="data-ring ring-3"></div>
+                    <div class="data-orb"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps">
+                    <div class="step-card">
+                        <div class="step-icon">📊</div>
+                        <h3>Make Your Forecast</h3>
+                        <p>Submit probability predictions on Irish events (0-100%)</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">💎</div>
+                        <h3>Earn Points</h3>
+                        <p>Get rewarded based on your accuracy when markets resolve</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">🏆</div>
+                        <h3>Climb Rankings</h3>
+                        <p>Top forecasters earn badges and reputation</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="markets">
+            <div class="container">
+                <h2 class="section-title">Live Markets</h2>
+                <div class="markets-grid">
+                    <!-- Markets will be loaded here dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2,847</div>
+                        <div class="stat-label">Forecasts Made</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">342</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">89%</div>
+                        <div class="stat-label">Average Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                    <div class="social-icons">
+                        <div class="social-icon">𝕏</div>
+                        <div class="social-icon">in</div>
+                    </div>
+                </div>
+                <div class="copyright">© 2024 Lytir.io - Made in Ireland 🇮🇪</div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="market-detail" class="page">
+        <div class="container">
+            <a class="back-button" onclick="showPage('home')">← Back to Markets</a>
+            
+            <div class="market-detail-header">
+                <span class="category-badge badge-sports">Sports</span>
+                <h1>Will Ireland qualify for FIFA World Cup 2026?</h1>
+                <div class="market-meta">
+                    <span>📅 Resolves: June 30, 2026</span>
+                </div>
+                <div class="market-description">
+                    This market resolves YES if Ireland's national football team qualifies for the 2026 FIFA World Cup by the end of qualifying rounds.
+                </div>
+            </div>
+
+            <div class="detail-grid">
+                <div>
+                    <div class="crowd-forecast">
+                        <div class="crowd-label">Community Consensus</div>
+                        <div class="crowd-percentage">67%</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--green-light); margin: 1rem 0;">YES</div>
+                        <div class="gauge">
+                            <div class="gauge-bg">
+                                <div class="gauge-fill"></div>
+                            </div>
+                        </div>
+                        <div class="forecast-count">234 predictions submitted</div>
+                    </div>
+
+                    <div class="forecast-panel">
+                        <h3>Submit Your Forecast</h3>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span>0% (NO)</span>
+                                <span>100% (YES)</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="50" class="slider" id="forecastSlider">
+                            <div class="slider-value"><span id="sliderValue">50</span>% YES</div>
+                        </div>
+                        <div class="token-info">
+                            <span>Cost: 10 LYTIR tokens</span>
+                            <span style="color: var(--green-primary); font-weight: 600;">Your balance: 990 tokens</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="handleForecastSubmit()">Submit Forecast</button>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Forecast Distribution</h3>
+                        <div class="chart">
+                            <div class="chart-bar" style="height: 15%; animation-delay: 0s;"></div>
+                            <div class="chart-bar" style="height: 25%; animation-delay: 0.1s;"></div>
+                            <div class="chart-bar" style="height: 35%; animation-delay: 0.2s;"></div>
+                            <div class="chart-bar" style="height: 45%; animation-delay: 0.3s;"></div>
+                            <div class="chart-bar" style="height: 55%; animation-delay: 0.4s;"></div>
+                            <div class="chart-bar" style="height: 75%; animation-delay: 0.5s;"></div>
+                            <div class="chart-bar" style="height: 95%; animation-delay: 0.6s;"></div>
+                            <div class="chart-bar" style="height: 60%; animation-delay: 0.7s;"></div>
+                            <div class="chart-bar" style="height: 30%; animation-delay: 0.8s;"></div>
+                            <div class="chart-bar" style="height: 20%; animation-delay: 0.9s;"></div>
+                        </div>
+                    </div>
+
+                    <div class="recent-forecasts">
+                        <h3>Recent Forecasts</h3>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="market-stats">
+                        <h3 style="font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem;">Market Stats</h3>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Total Pool</div>
+                            <div class="stat-item-value">€2,340 in play</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Created</div>
+                            <div class="stat-item-value">Nov 15, 2024</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Volume</div>
+                            <div class="stat-item-value">234 forecasts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Last Activity</div>
+                            <div class="stat-item-value">3 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="page">
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-avatar">C</div>
+                <div class="profile-info">
+                    <div class="profile-username">Cora_IE</div>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">💎 990</div>
+                            <div class="profile-stat-label">LYTIR Tokens</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">✓ 87%</div>
+                            <div class="profile-stat-label">Accuracy Score</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">🏆 #42</div>
+                            <div class="profile-stat-label">Rank</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">18</div>
+                            <div class="profile-stat-label">Total Forecasts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forecasts-table">
+                <h2>My Forecasts</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Market</th>
+                            <th>My Forecast</th>
+                            <th>Crowd</th>
+                            <th>Status</th>
+                            <th>Reward</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Forecasts will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="accuracy-graph">
+                <h2>Accuracy Timeline</h2>
+                <div class="graph-canvas">
+                    <svg class="graph-svg" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#34D399;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:#10B981;stop-opacity:0.05" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M0,150 L100,140 L200,120 L300,110 L400,100 L500,90 L600,70 L700,50 L800,40" 
+                              fill="url(#areaGradient)" 
+                              stroke="none"/>
+                        <path d="M0,150 L100,140 L200,120 L300,110 L400,100 L500,90 L600,70 L700,50 L800,40" 
+                              fill="none" 
+                              stroke="url(#lineGradient)" 
+                              stroke-width="3"
+                              style="animation: drawLine 2s ease-out;"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="achievements">
+                <h2>Achievements</h2>
+                <div class="achievements-grid">
+                    <div class="achievement-badge unlocked">
+                        <div class="achievement-icon">🎯</div>
+                        <div class="achievement-name">First Forecast</div>
+                        <div class="achievement-desc">Make your first prediction</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">💯</div>
+                        <div class="achievement-name">Perfect Predictor</div>
+                        <div class="achievement-desc">Get 5 forecasts 95%+ accurate</div>
+                    </div>
+                    <div class="achievement-badge unlocked">
+                        <div class="achievement-icon">🍀</div>
+                        <div class="achievement-name">Irish Expert</div>
+                        <div class="achievement-desc">10+ Irish event forecasts</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">⚡</div>
+                        <div class="achievement-name">Early Bird</div>
+                        <div class="achievement-desc">Forecast within 1 hour of market creation</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-name">Streak Master</div>
+                        <div class="achievement-desc">7-day forecasting streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaderboard-preview">
+                <h2>Leaderboard</h2>
+                <!-- Leaderboard will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // API CONFIGURATION
+        // ========================================
+        // IMPORTANT: Change this to your deployed backend URL when deploying!
+        const API_BASE = 'http://localhost:5001/api'; 
+        // Example for Replit: 'https://your-backend-name.yourname.repl.co/api'
+        // Example for Render: 'https://your-backend.onrender.com/api'
+        
+        let currentUser = null;
+        let currentMarkets = [];
+        let selectedMarket = null;
+
+        // ========================================
+        // UTILITY FUNCTIONS
+        // ========================================
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function showLoading(show = true) {
+            let loader = document.getElementById('globalLoader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'globalLoader';
+                loader.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(15, 23, 42, 0.8);
+                        backdrop-filter: blur(5px);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 9999;
+                    ">
+                        <div style="
+                            width: 60px;
+                            height: 60px;
+                            border: 4px solid rgba(16, 185, 129, 0.2);
+                            border-top-color: #10B981;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                        "></div>
+                    </div>
+                `;
+                document.body.appendChild(loader);
+            }
+            loader.style.display = show ? 'block' : 'none';
+        }
+
+        // ========================================
+        // AUTHENTICATION API CALLS
+        // ========================================
+        async function login(email, password) {
+            try {
+                showLoading();
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                showLoading(false);
+                
+                if (response.ok) {
+                    currentUser = data.user;
+                    updateUIForLoggedInUser();
+                    showNotification('Welcome back!');
+                    showPage('home');
+                    await loadMarkets();
+                    return data;
+                } else {
+                    showNotification(data.error || 'Login failed', 'error');
+                    return null;
+                }
+            } catch (error) {
+                showLoading(false);
+                showNotification('Connection error. Please try again.', 'error');
+                console.error('Login error:', error);
+                return null;
+            }
+        }
+
+        async function signup(username, email, password) {
+            try {
+                showLoading();
+                const response = await fetch(`${API_BASE}/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                showLoading(false);
+                
+                if (response.ok) {
+                    currentUser = data.user;
+                    updateUIForLoggedInUser();
+                    showNotification('Account created successfully!');
+                    showPage('home');
+                    await loadMarkets();
+                    return data;
+                } else {
+                    showNotification(data.error || 'Signup failed', 'error');
+                    return null;
+                }
+            } catch (error) {
+                showLoading(false);
+                showNotification('Connection error. Please try again.', 'error');
+                console.error('Signup error:', error);
+                return null;
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_BASE}/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                currentUser = null;
+                updateUIForLoggedOutUser();
+                showNotification('Logged out successfully');
+                showPage('home');
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // ========================================
+        // MARKET API CALLS
+        // ========================================
+        async function getMarkets() {
+            try {
+                const response = await fetch(`${API_BASE}/markets`, {
+                    credentials: 'include'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching markets:', error);
+                return [];
+            }
+        }
+
+        async function getMarketById(marketId) {
+            try {
+                const response = await fetch(`${API_BASE}/markets/${marketId}`, {
+                    credentials: 'include'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching market:', error);
+                return null;
+            }
+        }
+
+        async function submitForecast(marketId, probability) {
+            try {
+                showLoading();
+                const response = await fetch(`${API_BASE}/forecast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ 
+                        market_id: marketId, 
+                        probability: parseFloat(probability) 
+                    })
+                });
+                
+                const data = await response.json();
+                showLoading(false);
+                
+                if (response.ok) {
+                    showNotification('Forecast submitted successfully!');
+                    await loadMarketDetail(marketId);
+                    await getUserData();
+                    return data;
+                } else {
+                    showNotification(data.error || 'Failed to submit forecast', 'error');
+                    return null;
+                }
+            } catch (error) {
+                showLoading(false);
+                showNotification('Connection error. Please try again.', 'error');
+                console.error('Forecast submission error:', error);
+                return null;
+            }
+        }
+
+        // ========================================
+        // USER DATA API CALLS
+        // ========================================
+        async function getUserData() {
+            try {
+                const response = await fetch(`${API_BASE}/user`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data;
+                    return data;
+                } else {
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                return null;
+            }
+        }
+
+        async function getUserForecasts() {
+            try {
+                const response = await fetch(`${API_BASE}/user/forecasts`, {
+                    credentials: 'include'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching user forecasts:', error);
+                return [];
+            }
+        }
+
+        async function getLeaderboard() {
+            try {
+                const response = await fetch(`${API_BASE}/leaderboard`, {
+                    credentials: 'include'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+                return [];
+            }
+        }
+
+        // ========================================
+        // UI UPDATE FUNCTIONS
+        // ========================================
+        function updateUIForLoggedInUser() {
+            const loginBtn = document.querySelector('.btn-login');
+            const signupBtn = document.querySelector('.btn-signup');
+            
+            if (loginBtn && currentUser) {
+                loginBtn.textContent = currentUser.username;
+                loginBtn.onclick = () => showPage('dashboard');
+            }
+            
+            if (signupBtn) {
+                signupBtn.textContent = 'Logout';
+                signupBtn.onclick = logout;
+            }
+        }
+
+        function updateUIForLoggedOutUser() {
+            const loginBtn = document.querySelector('.btn-login');
+            const signupBtn = document.querySelector('.btn-signup');
+            
+            if (loginBtn) {
+                loginBtn.textContent = 'Login';
+                loginBtn.onclick = showLoginModal;
+            }
+            
+            if (signupBtn) {
+                signupBtn.textContent = 'Sign Up';
+                signupBtn.onclick = showSignupModal;
+            }
+        }
+
+        // ========================================
+        // LOAD AND DISPLAY DATA
+        // ========================================
+        async function loadMarkets() {
+            try {
+                const markets = await getMarkets();
+                currentMarkets = markets;
+                displayMarkets(markets);
+            } catch (error) {
+                console.error('Error loading markets:', error);
+            }
+        }
+
+        function displayMarkets(markets) {
+            const marketsGrid = document.querySelector('.markets-grid');
+            if (!marketsGrid || !markets || markets.length === 0) return;
+            
+            marketsGrid.innerHTML = markets.slice(0, 3).map(market => {
+                const categoryClass = market.category?.toLowerCase() || 'tech';
+                const probability = market.crowd_prediction || 50;
+                
+                return `
+                    <div class="market-card" onclick="showMarketDetail(${market.id})">
+                        <div class="market-header">
+                            <span class="category-badge badge-${categoryClass}">${market.category || 'General'}</span>
+                        </div>
+                        <h3>${market.question}</h3>
+                        <div class="prediction-bar">
+                            <div class="prediction-label">
+                                <span>Community</span>
+                                <span class="prediction-value">${probability}% YES</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${probability}%"></div>
+                            </div>
+                        </div>
+                        <div class="market-footer">
+                            <span class="forecasters">${market.forecasts_count || 0} forecasters</span>
+                            <button class="btn-forecast" onclick="event.stopPropagation(); showMarketDetail(${market.id})">Forecast Now</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function showMarketDetail(marketId) {
+            if (!currentUser) {
+                showNotification('Please login to view market details', 'error');
+                showLoginModal();
+                return;
+            }
+            
+            selectedMarket = marketId;
+            await loadMarketDetail(marketId);
+            showPage('market-detail');
+        }
+
+        async function loadMarketDetail(marketId) {
+            try {
+                showLoading();
+                const market = await getMarketById(marketId);
+                showLoading(false);
+                
+                if (!market) {
+                    showNotification('Market not found', 'error');
+                    return;
+                }
+                
+                displayMarketDetail(market);
+            } catch (error) {
+                showLoading(false);
+                console.error('Error loading market detail:', error);
+            }
+        }
+
+        function displayMarketDetail(market) {
+            const detailPage = document.getElementById('market-detail');
+            if (!detailPage) return;
+            
+            const probability = market.crowd_prediction || 50;
+            const categoryClass = market.category?.toLowerCase() || 'tech';
+            
+            detailPage.querySelector('.market-detail-header h1').textContent = market.question;
+            detailPage.querySelector('.category-badge').textContent = market.category || 'General';
+            detailPage.querySelector('.category-badge').className = `category-badge badge-${categoryClass}`;
+            detailPage.querySelector('.market-description').textContent = market.description || 'No description available';
+            
+            detailPage.querySelector('.crowd-percentage').textContent = `${probability}%`;
+            detailPage.querySelector('.forecast-count').textContent = `${market.forecasts_count || 0} predictions submitted`;
+            
+            const gaugeFill = detailPage.querySelector('.gauge-fill');
+            if (gaugeFill) {
+                gaugeFill.style.clipPath = `polygon(0 0, ${probability}% 0, ${probability}% 100%, 0 100%)`;
+            }
+            
+            const slider = detailPage.querySelector('#forecastSlider');
+            if (slider) {
+                slider.value = probability;
+                detailPage.querySelector('#sliderValue').textContent = probability;
+            }
+            
+            if (market.recent_forecasts) {
+                displayRecentForecasts(market.recent_forecasts);
+            }
+        }
+
+        function displayRecentForecasts(forecasts) {
+            const container = document.querySelector('.recent-forecasts');
+            if (!container || !forecasts || forecasts.length === 0) return;
+            
+            const forecastsHTML = forecasts.map(forecast => {
+                const initials = forecast.username ? forecast.username.substring(0, 2).toUpperCase() : 'AN';
+                const timeAgo = getTimeAgo(forecast.created_at);
+                
+                return `
+                    <div class="forecast-item">
+                        <div class="avatar">${initials}</div>
+                        <div class="forecast-info">
+                            <div class="forecast-username">${forecast.username || 'Anonymous'}</div>
+                            <div class="forecast-prediction">predicted ${forecast.probability}% YES</div>
+                        </div>
+                        <div class="forecast-time">${timeAgo}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = '<h3>Recent Forecasts</h3>' + forecastsHTML;
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const past = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - past) / 1000);
+            
+            if (diffInSeconds < 60) return 'just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            return `${Math.floor(diffInSeconds / 86400)} days ago`;
+        }
+
+        async function loadDashboard() {
+            if (!currentUser) {
+                showNotification('Please login to view dashboard', 'error');
+                showLoginModal();
+                return;
+            }
+            
+            try {
+                showLoading();
+                const [userData, userForecasts, leaderboard] = await Promise.all([
+                    getUserData(),
+                    getUserForecasts(),
+                    getLeaderboard()
+                ]);
+                showLoading(false);
+                
+                displayDashboard(userData, userForecasts, leaderboard);
+            } catch (error) {
+                showLoading(false);
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function displayDashboard(userData, forecasts, leaderboard) {
+            if (!userData) return;
+            
+            const avatar = document.querySelector('.profile-avatar');
+            const username = document.querySelector('.profile-username');
+            if (avatar) avatar.textContent = userData.username.substring(0, 1).toUpperCase();
+            if (username) username.textContent = userData.username;
+            
+            const stats = document.querySelectorAll('.profile-stat-value');
+            if (stats[0]) stats[0].innerHTML = `💎 ${userData.tokens || 0}`;
+            if (stats[1]) stats[1].innerHTML = `✓ ${userData.accuracy || 0}%`;
+            if (stats[2]) stats[2].innerHTML = `🏆 #${userData.rank || 'N/A'}`;
+            if (stats[3]) stats[3].textContent = userData.forecasts_count || 0;
+            
+            if (forecasts && forecasts.length > 0) {
+                displayForecastsTable(forecasts);
+            }
+            
+            if (leaderboard && leaderboard.length > 0) {
+                displayLeaderboardPreview(leaderboard, userData);
+            }
+        }
+
+        function displayForecastsTable(forecasts) {
+            const tbody = document.querySelector('.forecasts-table tbody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = forecasts.map(forecast => {
+                const isResolved = forecast.status === 'resolved';
+                const rowClass = isResolved ? 'background: rgba(16, 185, 129, 0.05);' : '';
+                const statusClass = isResolved ? 'status-resolved' : 'status-active';
+                const statusText = isResolved ? 'Resolved ✓' : 'Active';
+                const reward = forecast.reward ? `+${forecast.reward} tokens` : '-';
+                const rewardClass = forecast.reward ? 'reward-positive' : '';
+                
+                return `
+                    <tr style="${rowClass}">
+                        <td>${forecast.market_question}</td>
+                        <td>${forecast.probability}% YES</td>
+                        <td>${forecast.crowd_prediction || 'N/A'}% YES</td>
+                        <td><span class="forecast-status ${statusClass}">${statusText}</span></td>
+                        <td class="${rewardClass}">${reward}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function displayLeaderboardPreview(leaderboard, userData) {
+            const container = document.querySelector('.leaderboard-preview');
+            if (!container) return;
+            
+            const items = leaderboard.slice(0, 5).map((user, index) => {
+                const isCurrentUser = userData && user.id === userData.id;
+                const itemClass = isCurrentUser ? 'leaderboard-item current-user' : 'leaderboard-item';
+                const initials = user.username.substring(0, 2).toUpperCase();
+                const displayName = isCurrentUser ? `YOU (${user.username})` : user.username;
+                
+                return `
+                    <div class="${itemClass}">
+                        <div class="leaderboard-rank">${index + 1}</div>
+                        <div class="avatar">${initials}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${displayName}</div>
+                            <div class="leaderboard-accuracy">${user.accuracy || 0}% accuracy</div>
+                        </div>
+                        <div class="leaderboard-tokens">${user.tokens || 0}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = '<h2>Leaderboard</h2>' + items;
+        }
+
+        // ========================================
+        // MODAL FUNCTIONS
+        // ========================================
+        function showLoginModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(15, 23, 42, 0.9);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease-out;
+                " onclick="this.remove()">
+                    <div style="
+                        background: rgba(255, 255, 255, 0.05);
+                        backdrop-filter: blur(20px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 20px;
+                        padding: 3rem;
+                        max-width: 400px;
+                        width: 90%;
+                    " onclick="event.stopPropagation()">
+                        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 2rem; text-align: center;">Login to Lytir.io</h2>
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <input type="email" id="loginEmail" placeholder="Email" required style="
+                                width: 100%;
+                                padding: 1rem;
+                                margin-bottom: 1rem;
+                                background: rgba(255, 255, 255, 0.05);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 10px;
+                                color: white;
+                                font-family: 'Plus Jakarta Sans', sans-serif;
+                                font-size: 1rem;
+                            ">
+                            <input type="password" id="loginPassword" placeholder="Password" required style="
+                                width: 100%;
+                                padding: 1rem;
+                                margin-bottom: 1.5rem;
+                                background: rgba(255, 255, 255, 0.05);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 10px;
+                                color: white;
+                                font-family: 'Plus Jakarta Sans', sans-serif;
+                                font-size: 1rem;
+                            ">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Login</button>
+                            <p style="text-align: center; color: var(--gray-light);">
+                                Don't have an account? <a href="#" onclick="event.preventDefault(); this.closest('[style*=\"position: fixed\"]').remove(); showSignupModal();" style="color: var(--green-primary); text-decoration: none; font-weight: 600;">Sign Up</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showSignupModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(15, 23, 42, 0.9);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease-out;
+                " onclick="this.remove()">
+                    <div style="
+                        background: rgba(255, 255, 255, 0.05);
+                        backdrop-filter: blur(20px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 20px;
+                        padding: 3rem;
+                        max-width: 400px;
+                        width: 90%;
+                    " onclick="event.stopPropagation()">
+                        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 2rem; text-align: center;">Create Account</h2>
+                        <form id="signupForm" onsubmit="handleSignup(event)">
+                            <input type="text" id="signupUsername" placeholder="Username" required style="
+                                width: 100%;
+                                padding: 1rem;
+                                margin-bottom: 1rem;
+                                background: rgba(255, 255, 255, 0.05);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 10px;
+                                color: white;
+                                font-family: 'Plus Jakarta Sans', sans-serif;
+                                font-size: 1rem;
+                            ">
+                            <input type="email" id="signupEmail" placeholder="Email" required style="
+                                width: 100%;
+                                padding: 1rem;
+                                margin-bottom: 1rem;
+                                background: rgba(255, 255, 255, 0.05);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 10px;
+                                color: white;
+                                font-family: 'Plus Jakarta Sans', sans-serif;
+                                font-size: 1rem;
+                            ">
+                            <input type="password" id="signupPassword" placeholder="Password" required style="
+                                width: 100%;
+                                padding: 1rem;
+                                margin-bottom: 1.5rem;
+                                background: rgba(255, 255, 255, 0.05);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 10px;
+                                color: white;
+                                font-family: 'Plus Jakarta Sans', sans-serif;
+                                font-size: 1rem;
+                            ">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Sign Up</button>
+                            <p style="text-align: center; color: var(--gray-light);">
+                                Already have an account? <a href="#" onclick="event.preventDefault(); this.closest('[style*=\"position: fixed\"]').remove(); showLoginModal();" style="color: var(--green-primary); text-decoration: none; font-weight: 600;">Login</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = await login(email, password);
+            if (result) {
+                document.querySelector('[style*="position: fixed"]')?.remove();
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            const result = await signup(username, email, password);
+            if (result) {
+                document.querySelector('[style*="position: fixed"]')?.remove();
+            }
+        }
+
+        // ========================================
+        // FORECAST SUBMISSION
+        // ========================================
+        async function handleForecastSubmit() {
+            if (!currentUser) {
+                showNotification('Please login to submit forecasts', 'error');
+                showLoginModal();
+                return;
+            }
+            
+            if (!selectedMarket) {
+                showNotification('No market selected', 'error');
+                return;
+            }
+            
+            const slider = document.getElementById('forecastSlider');
+            const probability = slider.value;
+            
+            await submitForecast(selectedMarket, probability);
+        }
+
+        // ========================================
+        // PAGE NAVIGATION
+        // ========================================
+        function showPage(page) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
+            
+            if (page === 'home') {
+                document.getElementById('homepage').classList.add('active');
+                loadMarkets();
+            } else if (page === 'market-detail' || page === 'markets') {
+                document.getElementById('market-detail').classList.add('active');
+            } else if (page === 'dashboard') {
+                document.getElementById('dashboard').classList.add('active');
+                loadDashboard();
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========================================
+        // SLIDER FUNCTIONALITY
+        // ========================================
+        const slider = document.getElementById('forecastSlider');
+        const sliderValue = document.getElementById('sliderValue');
+        
+        if (slider && sliderValue) {
+            slider.addEventListener('input', function() {
+                sliderValue.textContent = this.value;
+            });
+        }
+
+        // ========================================
+        // ANIMATIONS
+        // ========================================
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            observer.observe(stat);
+        });
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        window.addEventListener('DOMContentLoaded', async function() {
+            const userData = await getUserData();
+            if (userData) {
+                currentUser = userData;
+                updateUIForLoggedInUser();
+            }
+            
+            await loadMarkets();
+        });
+    </script>
+</body>
+</html>
